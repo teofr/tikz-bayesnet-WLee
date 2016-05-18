@@ -1,6 +1,5 @@
 BayesNet - WLee
 ===============
-##BayesNet - _Wlee_ style
 
 TikZ library for drawing Bayesian networks, graphical models and (directed) factor
 graphs in LaTeX.
