@@ -16,25 +16,35 @@
 \usetikzlibrary{chains}
 \usetikzlibrary{arrows}
 
-% Latent node
-\tikzstyle{latent} = [circle,fill=white,draw=black,inner sep=1pt,
+% Latent Discrete node
+\tikzstyle{latentDisc} = [rectangle,fill=white,draw=black,thick,inner sep=1pt,
 minimum size=20pt, font=\fontsize{10}{10}\selectfont, node distance=1]
-% Observed node
-\tikzstyle{obs} = [latent,fill=gray!25]
+% Latent Continous node
+\tikzstyle{latentCont} = [circle,fill=white,draw=black,thick,inner sep=1pt,
+minimum size=20pt, font=\fontsize{10}{10}\selectfont, node distance=1]
+
+% Observed Discrete node
+\tikzstyle{obsDisc} = [latentDisc,fill=gray!50]
+% Observed Continous node
+\tikzstyle{obsCont} = [latentCont,fill=gray!50]
+
 % Constant node
 \tikzstyle{const} = [rectangle, inner sep=0pt, node distance=1]
 % Factor node
 \tikzstyle{factor} = [rectangle, fill=black,minimum size=5pt, inner
 sep=0pt, node distance=0.4]
-% Deterministic node
-\tikzstyle{det} = [latent, diamond]
+
+% Deterministic Continous node
+\tikzstyle{detDisc} = [latentDisc, double, double distance = 1pt]
+% Deterministic	Continous node
+\tikzstyle{detCont} = [latentCont, double, double distance = 1pt]
 
 % Plate node
-\tikzstyle{plate} = [draw, rectangle, rounded corners, fit=#1]
+\tikzstyle{plate} = [draw, rectangle, rounded corners,thick, fit=#1]
 % Invisible wrapper node
 \tikzstyle{wrap} = [inner sep=0pt, fit=#1]
 % Gate
-\tikzstyle{gate} = [draw, rectangle, dashed, fit=#1]
+\tikzstyle{gate} = [draw, rectangle, dashed, thick, fit=#1]
 
 % Caption node
 \tikzstyle{caption} = [font=\footnotesize, node distance=0] %

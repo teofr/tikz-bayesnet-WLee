@@ -13,7 +13,7 @@
 \documentclass[a4paper]{article}
 
 \usepackage{tikz}
-\usetikzlibrary{bayesnet}
+\usetikzlibrary{bayesnetWLee}
 %\pgfrealjobname{example} % name of this file
 
 \title{Graphical Models in Tikz}
@@ -34,23 +34,43 @@ factor graphs \cite{Dietz:2010}.
       Type & Syntax & Output
       \\
       \hline
-      Latent variable &
-      \texttt{\textbackslash node[latent]} &
+      Latent Continous variable &
+      \texttt{\textbackslash node[latentCont]} &
       \tikz{ %
-        \node[latent] {$x$}; %
+        \node[latentCont] {$x$}; %
       }
       \\
-      Observed variable &
-      \texttt{\textbackslash node[obs]} &
+      Latent Discrete variable &
+      \texttt{\textbackslash node[latentDisc]} &
       \tikz{ %
-        \node[obs] {$y$}; %
+        \node[latentDisc] {$x$}; %
       }
       \\
-      Deterministic &
-      \texttt{\textbackslash node[det]} &
+      Observed Discrete variable &
+      \texttt{\textbackslash node[obsDisc]} &
       \tikz{ %
-        \node[det] {dot} ; %
+        \node[obsDisc] {$y$}; %
       }
+
+      \\
+      Observed Continous variable &
+      \texttt{\textbackslash node[obsCont]} &
+      \tikz{ %
+        \node[obsCont] {$y$}; %
+      }
+      \\
+      Deterministic Discrete &
+      \texttt{\textbackslash node[detDisc]} &
+      \tikz{ %
+        \node[detDisc] {H} ; %
+      }
+      \\
+      Deterministic Continous &
+      \texttt{\textbackslash node[detCont]} &
+      \tikz{ %
+        \node[detCont] {H} ; %
+      }
+      
       \\
       Constant &
       \texttt{\textbackslash node[const]} &
@@ -76,27 +96,27 @@ factor graphs \cite{Dietz:2010}.
       Directed edges &
       \texttt{\textbackslash edge[opts]\{inputs\}\{outputs\}} &
       \tikz{ %
-        \node[obs] (y) {$y$} ; %
-        \node[latent, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
-        \node[latent, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
+        \node[obsDisc] (y) {$y$} ; %
+        \node[latentDisc, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
+        \node[latentDisc, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
         \edge {mu,tau} {y} ; %
       }
       \\
       Undirected edges &
       \texttt{\textbackslash edge[-,opts]\{inputs\}\{outputs\}} &
       \tikz{ %
-        \node[obs] (y) {$y$} ; %
-        \node[latent, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
-        \node[latent, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
+        \node[obsDisc] (y) {$y$} ; %
+        \node[latentCont, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
+        \node[latentCont, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
         \edge[-] {mu,tau} {y} ; %
       }
       \\
       Factor graph edges &
       \texttt{\textbackslash factoredge[opts]\{inputs\}\{via\}\{outputs\}} &
       \tikz{ %
-        \node[obs] (y) {$y$} ; %
-        \node[latent, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
-        \node[latent, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
+        \node[obsCont] (y) {$y$} ; %
+        \node[latentCont, left=of y, yshift=0.5cm] (mu) {$\mu$} ; %
+        \node[latentDisc, left=of y, yshift=-0.5cm] (tau) {$\tau$} ; %
         \factor[left=of y] {y-factor} {$\mathcal{N}$} {} {};
         \factoredge {mu,tau} {y-factor} {y} ; %
       }
@@ -113,18 +133,18 @@ factor graphs \cite{Dietz:2010}.
       Plate &
       \texttt{\textbackslash plate} &
       \tikz{ %
-        \node[latent] (x) {$x_m$}; %
-        \plate {} {(x)} {$m \in \mathcal{M}$}; %
+        \node[latentDisc] (x) {$x_m$}; %
+	\plate {} {(x)} {$m \in \mathcal{M}$}; %
       }
       \\
       Gate &
       &
       \tikz{
         % Nodes
-        \node[obs]                    (k)   {$k$}; %
-        \node[latent, above=2 of k]   (l)   {$\lambda$}; %
+        \node[obsCont]                    (k)   {$k$}; %
+        \node[latentDisc, above=2 of k]   (l)   {$\lambda$}; %
         \factor[above=0.8 of k]       {k-f} {Multi} {} {}; %
-        \node[latent, right=of k-f]   (paa) {$\phi$}; %
+        \node[latentCont, right=of k-f]   (paa) {$\phi$}; %
         %\node[latent, right=of k-f]   (p)   {$\phi$}; %
         % Connections
         \factoredge {paa} {k-f} {k} ; %
@@ -136,55 +156,55 @@ factor graphs \cite{Dietz:2010}.
 \end{table}
 
 
-% Simple Bayesian network
-\begin{figure}[ht]
-  \begin{center}
-    \begin{tabular}{cc}
-      \input{model_pca} &
-      \input{model_pca2}
-    \end{tabular}
-  \end{center}
-  \caption{PCA model as a Bayesian network and a directed factor
-    graph.}
-\end{figure}
+% % Simple Bayesian network
+% \begin{figure}[ht]
+%   \begin{center}
+%     \begin{tabular}{cc}
+%       \input{model_pca} &
+%       \input{model_pca2}
+%     \end{tabular}
+%   \end{center}
+%   \caption{PCA model as a Bayesian network and a directed factor
+%     graph.}
+% \end{figure}
 
-% Latent Dirichlet allocation
-\begin{figure}[ht]
-  \begin{center}
-    \input{model_lda}
-  \end{center}
-  \caption{Latent Dirichlet allocation as directed factor graph.}
-\end{figure}
+% % Latent Dirichlet allocation
+% \begin{figure}[ht]
+%   \begin{center}
+%     \input{model_lda}
+%   \end{center}
+%   \caption{Latent Dirichlet allocation as directed factor graph.}
+% \end{figure}
 
-% Citation influence model
-\begin{figure}[ht]
-  \begin{center}
-    \input{model_citation_influence}
-  \end{center}
-  \caption{Citation influence model with own topics \cite{Dietz:2007}
-    as directed factor graph.}
-\end{figure}
+% % Citation influence model
+% \begin{figure}[ht]
+%   \begin{center}
+%     \input{model_citation_influence}
+%   \end{center}
+%   \caption{Citation influence model with own topics \cite{Dietz:2007}
+%     as directed factor graph.}
+% \end{figure}
 
-\clearpage
+% \clearpage
 
-\begin{thebibliography}{9}
+% \begin{thebibliography}{9}
 
-\bibitem{Dietz:2010}
-  Laura Dietz,
-  \emph{Directed Factor Graph Notation for Generative Models}.
-  Technical Report. 2010
+% \bibitem{Dietz:2010}
+%   Laura Dietz,
+%   \emph{Directed Factor Graph Notation for Generative Models}.
+%   Technical Report. 2010
 
-% Laura Dietz, Steffen Bickel, Tobias Scheffer. 
-% Unsupervised Prediction of Citation Influences. 
-% In: Proceedings of International Conference on Machine Learning. 2007
-\bibitem{Dietz:2007}
-  Laura Dietz, Steffen Bickel, Tobias Scheffer,
-  \emph{Unsupervised Prediction of Citation Influences}.
-  In: Proceedings of International Conference on Machine
-  Learning. 2007
+% % Laura Dietz, Steffen Bickel, Tobias Scheffer. 
+% % Unsupervised Prediction of Citation Influences. 
+% % In: Proceedings of International Conference on Machine Learning. 2007
+% \bibitem{Dietz:2007}
+%   Laura Dietz, Steffen Bickel, Tobias Scheffer,
+%   \emph{Unsupervised Prediction of Citation Influences}.
+%   In: Proceedings of International Conference on Machine
+%   Learning. 2007
 
 
-\end{thebibliography}
+% \end{thebibliography}
 
 \end{document}
 
